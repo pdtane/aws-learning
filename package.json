@@ -5,10 +5,12 @@
   "author": "Peter",
   "license": "MIT",
   "dependencies": {
+    "aws-cli-js": "^2.0.5",
     "axios": "^0.18.0"
   },
   "scripts": {
     "exec": "node --experimental-modules index.mjs",
+    "aws-cli": "node --experimental-modules aws-cli.js",
     "test": "mocha test/ --require @babel/register --require @babel/polyfill"
   },
   "devDependencies": {

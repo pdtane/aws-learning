@@ -27,7 +27,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/test/index.spec.js"
+            "program": "${workspaceFolder}/aws-cli.js"
         }
     ]
 }
