@@ -8,19 +8,20 @@ ec2Resource = boto3.resource('ec2')
 def get_deployments():
     all_deployments = []
     response = apiGatewayClient.get_rest_apis()
-    deployments = map(get_deployments_for_api, response['items'])
+    deployments = map(lambda i: get_deployments_for_api(i['id']),
+                      response['items'])
     for d in deployments:
         all_deployments.extend(d)
     return all_deployments
 
-def get_deployments_for_api(restApi):
-    response = apiGatewayClient.get_deployments(restApiId=restApi['id'])
+def get_deployments_for_api(restApiId):
+    response = apiGatewayClient.get_deployments(restApiId=restApiId)
     return response['items']
 
 response = apiGatewayClient.get_rest_apis()
-print('Existing Rest APIs:')
+print('Existing deployments:')
 for deployment in get_deployments():
-    print(deployment)
+    pprint.pprint(deployment)
 
 instances = []
 response = ec2Client.describe_instances()
@@ -34,5 +35,5 @@ for i in instances:
 
 myInstances = ec2Resource.instances.all()
 for instance in myInstances:
-    print(instance)
+    pprint.pprint(instance)
 
