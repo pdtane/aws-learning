@@ -1,12 +1,23 @@
 import boto3
+import pprint
 
-client = boto3.client('apigateway')
+apiGatewayClient = boto3.client('apigateway')
+ec2Client = boto3.client('ec2')
 
-response = client.get_rest_apis()
+# response = apiGatewayClient.get_rest_apis()
+# print('Existing Rest APIs:')
+# for api in response['items']:
+#     print(api['name'])
+#     r = apiGatewayClient.get_deployments(restApiId=api['id'])
+#     for deployment in r['items']:
+#         print(deployment)
 
-print('Existing Rest APIs:')
-for api in response['items']:
-    print(api['name'])
-    r = client.get_deployments(restApiId=api["id"])
-    for deployment in r['items']:
-        print(deployment)
+instances = []
+response = ec2Client.describe_instances()
+print('Existing instances:')
+for reservation in response['Reservations']:
+    for instance in reservation['Instances']:
+        instances.append(instance)
+
+for i in instances:
+    pprint.pprint(i)
