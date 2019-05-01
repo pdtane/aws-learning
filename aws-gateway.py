@@ -5,13 +5,22 @@ apiGatewayClient = boto3.client('apigateway')
 ec2Client = boto3.client('ec2')
 ec2Resource = boto3.resource('ec2')
 
+def get_deployments():
+    all_deployments = []
+    response = apiGatewayClient.get_rest_apis()
+    deployments = map(get_deployments_for_api, response['items'])
+    for d in deployments:
+        all_deployments.extend(d)
+    return all_deployments
+
+def get_deployments_for_api(restApi):
+    response = apiGatewayClient.get_deployments(restApiId=restApi['id'])
+    return response['items']
+
 response = apiGatewayClient.get_rest_apis()
 print('Existing Rest APIs:')
-for api in response['items']:
-    print(api['name'])
-    r = apiGatewayClient.get_deployments(restApiId=api['id'])
-    for deployment in r['items']:
-        print(deployment)
+for deployment in get_deployments():
+    print(deployment)
 
 instances = []
 response = ec2Client.describe_instances()
